@@ -1,8 +1,20 @@
-cmake_minimum_required(VERSION 3.8)
-project(pong-sfml-sample)
+cmake_minimum_required (VERSION 3.8)
 
-find_package(SFML CONFIG COMPONENTS graphics REQUIRED)
-add_executable(pong "pong.cpp")
-target_link_libraries(pong PRIVATE sfml-graphics)
+project ("pong-sfml-sample")
 
-configure_file(resources/sansation.ttf resources/sansation.ttf COPYONLY)
+set(CMAKE_MODULE_PATH 
+    ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+if(UNIX)
+	set(SFML_STATIC_LIBRARIES ON)
+endif(UNIX)
+
+find_package(SFML COMPONENTS graphics window system REQUIRED)
+
+include_directories(${SFML_INCLUDE_DIR})
+
+add_executable (pong "pong.cpp")
+target_link_libraries(pong ${SFML_LIBRARIES})
+if(SFML_STATIC_LIBRARIES)
+	target_link_libraries(pong ${SFML_DEPENDENCIES})
+endif()
